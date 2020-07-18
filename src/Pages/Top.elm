@@ -48,7 +48,7 @@ subscriptions global model =
 
 view : Global.Model -> Model -> Document Msg
 view global model =
-    { title = "Top"
+    { title = "Calendar"
     , body =
         [ case global.today of
             Just day ->
@@ -62,9 +62,6 @@ view global model =
 
 calendar today =
     let
-        dayHeaders =
-            [ "S", "M", "T", "W", "T", "F", "S" ]
-
         viewDayHeader day =
             div [ class "text-gray-400 text-center" ] [ text day ]
 
@@ -87,6 +84,11 @@ calendar today =
         thisWeekDayNumbers =
             List.range -1 5
                 |> List.map (\index -> Date.add Days index startOfThisWeek)
+
+        dayHeaders =
+            thisWeekDayNumbers
+                |> List.map (Date.format "E")
+                |> List.map (String.toList >> List.head >> Maybe.map String.fromChar >> Maybe.withDefault "")
 
         nextWeekNumbers =
             List.range 6 12
