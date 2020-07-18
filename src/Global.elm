@@ -12,6 +12,7 @@ module Global exposing
 import Browser exposing (Document)
 import Browser.Navigation as Nav
 import Components
+import Date exposing (Date)
 import Generated.Route as Route exposing (Route)
 import Task
 import Url exposing (Url)
@@ -29,6 +30,7 @@ type alias Model =
     { flags : Flags
     , url : Url
     , key : Nav.Key
+    , today : Maybe Date
     }
 
 
@@ -38,7 +40,8 @@ init flags url key =
         flags
         url
         key
-    , Cmd.none
+        Nothing
+    , Date.today |> Task.perform GotToday
     )
 
 
@@ -48,11 +51,15 @@ init flags url key =
 
 type Msg
     = Navigate Route
+    | GotToday Date
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
+        GotToday date ->
+            ( { model | today = Just date }, Cmd.none )
+
         Navigate route ->
             ( model
             , Nav.pushUrl model.key (Route.toHref route)

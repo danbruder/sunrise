@@ -1,19 +1,19 @@
 module Components exposing (layout)
 
 import Browser exposing (Document)
+import FeatherIcons as FI
 import Generated.Route as Route exposing (Route)
 import Html exposing (..)
-import Html.Attributes as Attr exposing (class, href, style)
+import Html.Attributes as Attr exposing (..)
 
 
 layout : { page : Document msg } -> Document msg
 layout { page } =
     { title = page.title
     , body =
-        [ div [ class "column spacing--large pad--medium container h--fill" ]
+        [ div [ class "" ]
             [ navbar
-            , div [ class "column", style "flex" "1 0 auto" ] page.body
-            , footer
+            , div [] page.body
             ]
         ]
     }
@@ -21,16 +21,14 @@ layout { page } =
 
 navbar : Html msg
 navbar =
-    header [ class "row center-y spacing--between" ]
-        [ a [ class "link font--h5", href (Route.toHref Route.Top) ] [ text "home" ]
-        , div [ class "row center-y spacing--medium" ]
-            [ a [ class "link", href (Route.toHref Route.Docs) ] [ text "docs" ]
-            , a [ class "link", href (Route.toHref Route.NotFound) ] [ text "a broken link" ]
-            , a [ class "button", href "https://twitter.com/intent/tweet?text=elm-spa is ez pz" ] [ text "tweet about it" ]
+    header [ class "p-4 flex justify-between" ]
+        [ div [ class "flex" ]
+            [ div [ class "w-6" ] [ img [ src "/logo.png" ] [] ]
+            ]
+        , div [ class "grid grid-cols-4 gap-4" ]
+            [ div [ class "w-6 text-gray-500" ] [ FI.mail |> FI.toHtml [] ]
+            , div [ class "w-6 text-gray-500" ] [ FI.moreVertical |> FI.toHtml [] ]
+            , div [ class "w-6 text-gray-500" ] [ FI.plus |> FI.toHtml [] ]
+            , div [ class "w-6 text-gray-500" ] [ FI.settings |> FI.toHtml [] ]
             ]
         ]
-
-
-footer : Html msg
-footer =
-    Html.footer [] [ text "built with elm ❤" ]
